@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"github.com/HanmaDevin/image-processing/database"
+	"github.com/HanmaDevin/image-processing/server"
+)
 
 func main() {
-	fmt.Println("Beginning")
+	s := server.NewServer()
+	database.InitDB()
+	server.StartServer(s)
 }
