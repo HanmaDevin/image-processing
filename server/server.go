@@ -8,7 +8,6 @@ import (
 
 	"github.com/HanmaDevin/image-processing/database"
 	"github.com/HanmaDevin/image-processing/server/middleware"
-	"github.com/HanmaDevin/image-processing/types"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
@@ -68,7 +67,7 @@ func login(c echo.Context) error {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
-		"exp":     time.Now().Add(time.Hour * 1).Unix(),
+		"exp":     time.Now().Add(time.Hour * 24).Unix(),
 	})
 
 	tokenString, err := token.SignedString(jwtSecret)
@@ -83,7 +82,7 @@ func login(c echo.Context) error {
 }
 
 func signup(c echo.Context) error {
-	var user types.User
+	var user database.User
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
