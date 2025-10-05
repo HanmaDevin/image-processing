@@ -36,41 +36,41 @@ func StartServer(e *echo.Echo) {
 }
 
 func listImages(c echo.Context) error {
-	return nil
+	return c.JSON(http.StatusNotImplemented, "Not implemented yet")
 }
 
 func retrieve(c echo.Context) error {
-	return nil
+	return c.JSON(http.StatusNotImplemented, "Not implemented yet")
 }
 
 func transform(c echo.Context) error {
-	return nil
+	return c.JSON(http.StatusNotImplemented, "Not implemented yet")
 }
 
 func upload(c echo.Context) error {
-	return nil
+	return c.JSON(http.StatusNotImplemented, "Not implemented yet")
 }
 
 func login(c echo.Context) error {
 	var creds struct {
-		Email    string `json:"email"`
+		Username string `json:"username"`
 		Password string `json:"password"`
 	}
 	if err := c.Bind(&creds); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	user, err := database.LoginUser(creds.Email, creds.Password)
+	user, err := database.LoginUser(creds.Username, creds.Password)
 	if err != nil {
 		return c.JSON(http.StatusUnauthorized, "Invalid credentials")
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
-		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+		"exp":     time.Now().Add(time.Hour * 2).Unix(),
 	})
 
-	tokenString, err := token.SignedString(jwtSecret)
+	tokenString, err := token.SignedString([]byte(jwtSecret))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "Could not generate token")
 	}

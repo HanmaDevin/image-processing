@@ -13,7 +13,7 @@ import (
 
 func verifyToken(tokenString string) error {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return os.Getenv("JWT_SECRET"), nil
+		return []byte(os.Getenv("JWT_SECRET")), nil
 	})
 	if err != nil {
 		return err
@@ -26,7 +26,7 @@ func verifyToken(tokenString string) error {
 	if err != nil {
 		return fmt.Errorf("Could not get expiration date")
 	}
-	if expire.After(time.Now()) {
+	if expire.Before(time.Now()) {
 		return fmt.Errorf("Token is expired please login again")
 	}
 
@@ -35,7 +35,7 @@ func verifyToken(tokenString string) error {
 
 func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		tokenString := c.Response().Header().Get("Authorization")
+		tokenString := c.Request().Header.Get("Authorization")
 		if tokenString == "" {
 			return c.JSON(http.StatusUnauthorized, "Missing authorization header")
 		}

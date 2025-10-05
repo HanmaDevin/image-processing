@@ -3,16 +3,14 @@ package database
 import (
 	"errors"
 
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type User struct {
 	gorm.Model
-	Username string    `json:"username" gorm:"unique"`
-	Password string    `json:"password"`
-	Token    jwt.Token `json:"token"`
+	Username string `json:"username" gorm:"unique"`
+	Password string `json:"password"`
 }
 
 type Image struct {
