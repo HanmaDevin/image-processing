@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/HanmaDevin/image-processing/database"
@@ -27,6 +28,7 @@ func NewServer() *echo.Echo {
 	safe.POST("", upload)
 	safe.POST("/:id/transform", transform)
 	safe.GET("/:id", retrieve)
+	safe.GET("", listImages)
 
 	return e
 }
@@ -36,6 +38,18 @@ func StartServer(e *echo.Echo) {
 }
 
 func listImages(c echo.Context) error {
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+	limit, err := strconv.Atoi(c.QueryParam("limit"))
+	if err != nil || limit < 1 {
+		limit = 10
+	}
+	// offset := (page - 1) * limit
+
+	// TODO: Fetch set of images
+
 	return c.JSON(http.StatusNotImplemented, "Not implemented yet")
 }
 
